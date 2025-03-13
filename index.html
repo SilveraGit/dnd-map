@@ -3,21 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DND Map</title>
+    <title>DnD Map</title>
     <style>
-        body {
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
-        #mapContainer {
-            width: 1024px;
-            height: 1024px;
-            background-color: #d3d3d3;
-            overflow: hidden;
-            margin: 20px auto;
-            position: relative;
-            border: 1px solid #000;
-        }
+        body { text-align: center; background-color: #222; color: white; }
+        #map-container { position: relative; width: 1024px; height: 1024px; border: 2px solid white; margin: auto; }
+        #map { width: 100%; height: 100%; }
         .token {
             width: 50px;
             height: 50px;
@@ -34,8 +24,8 @@
     </style>
 </head>
 <body>
-<div id="mapContainer">
-    <img id="mapImage" src="map_default.jpg" alt="Map Image" style="width: 100%; height: 100%;">
+<div id="map-container">
+    <img id="map" src="map.jpg" alt="DnD Map">
     <div class="token" id="token1" style="top: 100px; left: 100px;">
         <img src="player1.png" alt="Token 1">
     </div>
@@ -51,37 +41,37 @@
 </div>
 
 <script>
-        let selectedToken = null;
-        let offsetX = 0, offsetY = 0;
+    let selectedToken = null;
+    let offsetX = 0, offsetY = 0;
 
-        function onTouchStart(event, token) {
-            selectedToken = token;
-            const touch = event.touches ? event.touches[0] : event;
-            const rect = token.getBoundingClientRect();
-            offsetX = touch.clientX - rect.left;
-            offsetY = touch.clientY - rect.top;
-        }
+    function onTouchStart(event, token) {
+        selectedToken = token;
+        const touch = event.touches ? event.touches[0] : event;
+        const rect = token.getBoundingClientRect();
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+    }
 
-        function onTouchMove(event) {
-            if (!selectedToken) return;
-            const touch = event.touches ? event.touches[0] : event;
-            selectedToken.style.left = (touch.clientX - offsetX) + 'px';
-            selectedToken.style.top = (touch.clientY - offsetY) + 'px';
-            event.preventDefault();
-        }
+    function onTouchMove(event) {
+        if (!selectedToken) return;
+        const touch = event.touches ? event.touches[0] : event;
+        selectedToken.style.left = (touch.clientX - offsetX) + 'px';
+        selectedToken.style.top = (touch.clientY - offsetY) + 'px';
+        event.preventDefault();
+    }
 
-        function onTouchEnd() {
-            selectedToken = null;
-        }
+    function onTouchEnd() {
+        selectedToken = null;
+    }
 
-        document.querySelectorAll('.token').forEach(token => {
-            token.addEventListener('mousedown', (e) => onTouchStart(e, token));
-            token.addEventListener('touchstart', (e) => onTouchStart(e, token));
-            document.addEventListener('mousemove', onTouchMove);
-            document.addEventListener('touchmove', onTouchMove);
-            document.addEventListener('mouseup', onTouchEnd);
-            document.addEventListener('touchend', onTouchEnd);
-        });
-    </script>
+    document.querySelectorAll('.token').forEach(token => {
+        token.addEventListener('mousedown', (e) => onTouchStart(e, token));
+        token.addEventListener('touchstart', (e) => onTouchStart(e, token));
+        document.addEventListener('mousemove', onTouchMove);
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('mouseup', onTouchEnd);
+        document.addEventListener('touchend', onTouchEnd);
+    });
+</script>
 </body>
 </html>
